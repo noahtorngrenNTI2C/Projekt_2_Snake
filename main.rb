@@ -1,3 +1,15 @@
+=begin
+Noah Törngren
+2024-02-28
+
+Detta program ska vara spelet snake
+Med piltangenterna ska man kunna styra ormen. Spelet tar slut när ormen har åkt in i en vägg eller ormen har åkt in i sig själv.
+Med ruby2d kan ett fönster ritas ut
+
+Programet består av två klasser: Snake och Game. En update funktion som körs vid varje frame och en event hanterare 
+som körs när en tangent är nedtryckt
+
+=end
 require 'ruby2d'
 
 set background: 'black'
@@ -7,7 +19,7 @@ SQUARE_SIZE = 20
 #for default window size of 480px * 640px, width is 32 (640/20) and height is 24 (480/20) at grid size = 20 pixels
 GRID_WIDTH = Window.width / SQUARE_SIZE
 GRID_HEIGHT = Window.height / SQUARE_SIZE
-#classen snake med alla metoder som handlar om ormen
+#classen snake med alla metoder som handlar om ormen, har inga konstuktor parametrar
 class Snake
   attr_writer :direction
 #instance variables begin with @. uninitialized instance variables have the value nil
@@ -45,6 +57,7 @@ class Snake
     @growing = true
   end
 #.shift moves all elements down by one
+# Denna metod flyttar på ormen. Inga parametrar och retunerar inget
   def move
     if !@growing
       @positions.shift
@@ -53,10 +66,9 @@ class Snake
     @positions.push(next_position)
     @growing = false
   end
-#kollar vilken riktning som är möjlig
+#En metod som kollar vilken riktning som är möjlig. Parametrar string new_direction
   def can_change_direction_to?(new_direction)
-#case statement is a multibranch statement like switch statements in other languages. 
-#makes it easy to execute different parts of the code based on a set value
+#Ett case statement som gör så new_direction inte blir motsatten
     case @direction
     when 'up' then new_direction != 'down'
     when 'down' then new_direction != 'up'
@@ -65,7 +77,7 @@ class Snake
     end
   end
 
-  # x positione av huvudet på ormen 
+  # x positionen av huvudet på ormen 
   def x
     head[0]
   end
@@ -105,13 +117,14 @@ class Snake
   end
 
   private
-#this method uses modulus to allow the snake 
-#to pop onto the other side of the screen if it goes over the edge
+  # alla privata metoder som Snake klassen har
+
+  # Denna metod var för att ormen skulle kunna köra igenom väggar. Har ändrats. Parametrar int x, x värdet på ormens huvud och int y y positionen på ormens huvud. Retunerar parametrarna
   def new_coords(x, y)
     #[x % GRID_WIDTH, y % GRID_HEIGHT] <-- om man ska kunna åka igenom väggen
     [x , y ]
   end
-  # retunerar kordinaterna på huvudet på ormen
+  # retunerar kordinaterna på huvudet på ormen vilket är en array
   def head
     @positions.last
   end
@@ -122,9 +135,9 @@ class Snake
   end
 
 end
-#Game classen som har avsvar för logiken i spelet
+#Game classen som har avsvar för logiken i spelet, har inga konstuktor parametrar
 class Game
-  def initialize
+  def initialize # initierar classens variabler
     @ball_x = 10
     @ball_y = 10
     @score = 0
@@ -135,11 +148,11 @@ class Game
     Sprite.new('img/apple.png',x: @ball_x * SQUARE_SIZE, y: @ball_y * SQUARE_SIZE, width: SQUARE_SIZE, height: SQUARE_SIZE)
     Text.new(text_message, color: 'white', x: 10, y: 10, size: 25, z: 1)
   end
- #kollar om omen äter äpplet
+ #en metod som kollar om omen äter äpplet. Parametrar: int x, int y. x och y kordinaterna på ormens huvud
   def snake_hit_ball?(x, y)
     @ball_x == x && @ball_y == y
   end
-#ny slumpad position för äpplet där ormens kordinat
+#ny slumpad position för äpplet. Parametrar: positions en array med ormens delars positioner
   def random_position(positions)
     x = rand(Window.width / SQUARE_SIZE)
     y = rand(Window.height / SQUARE_SIZE)
@@ -152,7 +165,7 @@ class Game
     return x, y
   end
   
-  # ändrar scoret och hämtar en ny position för äpplet
+  # ändrar scoret och hämtar en ny position för äpplet. Parametrar: positions en array med ormens delars positioner
   def record_hit(positions)
     @score += 1
     x,y = random_position(positions)
@@ -165,7 +178,7 @@ class Game
     @finished = true
   end
 
-  # kollar om spelet är klart
+  # kollar om spelet är klart. Retunerar boolean @finished
   def finished?
     @finished
   end
