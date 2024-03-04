@@ -6,7 +6,7 @@ Detta program ska vara spelet snake
 Med piltangenterna ska man kunna styra ormen. Spelet tar slut när ormen har åkt in i en vägg eller ormen har åkt in i sig själv.
 Med ruby2d kan ett fönster ritas ut
 
-Programet består av två klasser: Snake och Game. En update funktion som körs vid varje frame och en event hanterare 
+Programmet består av två klasser: Snake och Game. En update funktion som körs vid varje frame och en event hanterare 
 som körs när en tangent är nedtryckt
 
 =end
